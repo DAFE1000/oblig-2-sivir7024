@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Definere funksjonene
+def f(x):
+    return np.exp(-x/4) * np.arctan(x)
+
+def g(x):
+    return np.arctan(x) - 4 / (x**2 + 1)
+
+def g_derivert(x):
+    return 1 / (x**2 + 1) + 8*x / (x**2 + 1)**2
+
+def newtons_metode(x0, toleranse=1e-12, maks_itr=50):
+    x = x0
+    for i in range(maks_itr):
+        x_ny = x - g(x) / g_derivert(x)
+        if abs(x_ny - x) < toleranse:
+            return x_ny
+        x = x_ny
+    return x
+
+# Finn toppunktet
+x_maks = newtons_metode(1.5)
+y_maks = f(x_maks)
+
+print(f"Toppunkt: x = {x_maks:.4f}")
+print(f"          y = {y_maks:.4f}")
+
+# Plott
+x = np.linspace(-5, 20, 1000)
+
+plt.plot(x, f(x), color="#7c3aed", label=r"$f(x) = e^{-x/4} \cdot \arctan(x)$")
+plt.plot(x_maks, y_maks, "o", color="#f5c400", label=f"Toppunkt ({x_maks:.4f}, {y_maks:.4f})")
+plt.title(r"$f(x) = e^{-x/4} \cdot \tan^{-1} x$")
+plt.xlabel("$x$")
+plt.ylabel("$f(x)$")
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
